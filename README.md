@@ -2,7 +2,7 @@
 The University of Pittsburgh developed and has, since 1980, maintained the Mortality Information and Research Analytics system. MOIRA was built to facilitate the extraction and visualization of US mortality and population data in a standardized format. The [source data](https://moira.pitt.edu/sources) are provided by the National Center for Health Statistics and the US Census Bureau.
 
 ## Getting Started
-Below are instructions and example code for using the MOIRA API. If you have any questions please contact the Public Health Dynamics Laboratory [here](https://moira.pitt.edu/contact).
+Below are instructions and example code for using the MOIRA API in Python. You can download the most recent version of Python [here](https://www.python.org/downloads/) If you have any questions please contact the Public Health Dynamics Laboratory [here](https://moira.pitt.edu/contact).
 
 ## Login
 Register for the MOIRA system [here](https://moira.pitt.edu/users/create) to get your username and password
