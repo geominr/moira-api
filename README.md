@@ -24,21 +24,95 @@ def log_in(username, password):
 
 ## Payload
 
+
+
+
+Custom Cause of Death
+Custom ICD categories can be selected by providing individual ICD codes. The ICD code revision is required to correspond to the selected time period.
+
+
 ```python
-payload = {"timePeriod": [2000, 2001, 2002, 2003, 2004, 2005],
- "geoLevel":  "County",
- "abbreviatedStates":["CA","AZ"],
- "allCounties":"true",
- "ageGroup": "All Default",
- "ageGroupCategory": "12",
- "race": "All",
- "sex": "All",
- "codCategory": "113",
- "cod": [31,32,33,34],
- "groupBy": ["timePeriod","ageGroup"],
- "ratesPer": 1000,
- "ageAdjustment": "false"
-}
+payload={"""
+         
+         
+         
+         """
+         "timePeriod": [2000, 2001, 2002, 2003, 2004, 2005],
+         """
+         National, state, and county level data is available. 
+         The geographic region can be individually selected or 
+         joined into custom aggregated regions.
+
+         NOTE:
+         Alaska data is not available at the county level before 1979.
+         Alaska and Hawaii data is not available before 1960.
+         New Jersey data is not available from 1962-1963.
+         """
+         # "National", "State", or "County"
+         "geoLevel":  "County",
+         
+         
+         """
+         
+         
+         """
+         "abbreviatedStates":["CA","AZ"],
+         """
+         
+         
+         """
+         # Optional:
+         # "Aggregate selected states" or "Aggregate selected counties"
+         "geoAggregate": "Aggregate selected states",
+         
+         # Select all counties within selected states
+         "allCounties":"true",
+         """
+         
+         
+         """
+         "ageGroup": "All Default",         
+         """
+         
+         
+         """
+         "ageGroupCategory": "12",         
+         """
+         
+         
+         """
+         "race": "All",         
+         """
+         
+         
+         """
+         "sex": "All",         
+         """
+         Cause of Death Categories:
+         Standard 63 OCMAP categories are available for cause of death grouping. 
+         Additionally, the 113 MOIRA specific categories (ICD-9 and/or ICD-10 codes only)
+         """
+         "codCategory": "113",
+         """
+         Cause of Death codes can be found at:
+            https://moira.pitt.edu/codCategory/63
+            https://moira.pitt.edu/codCategory/113
+         """
+         "cod": [31,32,33,34],
+         """
+         Group by time period, age group, race and sex. 
+         MOIRA groups data geographically by default.
+         """
+         "groupBy": ["timePeriod","ageGroup","race","sex"},
+         """
+         Calculate mortality rates per 1000 or per 100,000         
+         """
+         "ratesPer": 1000,
+         """
+         
+         """
+         "ageAdjustment": "true"
+        }
 ```
 
 ## Query
@@ -64,6 +138,4 @@ print(response.text)
 "1","2000","04003","Cochise","AZ","27","117755","0.210001"
 "1","2000","04005","Coconino","AZ","SUPPRESSED","116320","SUPPRESSED"
 "1","2000","04007","Gila","AZ","15","51335","0.212762"
-"1","2000","04009","Graham","AZ","SUPPRESSED","33489","SUPPRESSED"
-"1","2000","04011","Greenlee","AZ","SUPPRESSED","8547","SUPPRESSED"
-"1","2000","04012","La Paz","AZ","SUPPRESSED","19715","SUPPRESSED"
+...
