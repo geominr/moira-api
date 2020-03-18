@@ -23,94 +23,61 @@ def log_in(username, password):
 ```
 
 ## Payload
-
-
-
-
-Custom Cause of Death
-Custom ICD categories can be selected by providing individual ICD codes. The ICD code revision is required to correspond to the selected time period.
-
+The API takes payload of selection criteria for each MOIRA query in the form of a dictionary with the following fields:
+* timePeriod
+    * 
+* geoLevel
+    * "National", "State", and "County" level data is available. The geographic region can be individually selected or joined into custom aggregated regions.
+* abbreviatedStates
+    * Include all state abbreviations in a list
+* countyFIPS
+    * Include all 5-digit county FIPS codes in a list
+* allCounties
+    * if "true", selects all counties from the states in abbreviatedStates
+* geoAggregate
+    * "Aggregate Selected States" or "Aggregate Selected Counties"
+* ageGroup
+    * List of age groupings such as "15 - 19", "20 - 24", etc.
+* ageGroupCategory
+    * "12", "13" or "Custom"
+* race
+    * "White", "Black", "American Indian or Alaska Native", "Asian or Pacific Islander" are available depending on the time period
+* hispanicOrigin
+    * "Hispanic or Latino", "Not Hispanic or Latino", "Not Stated"
+* sex
+    * "Male" or "Female" or "All"
+* codCategory
+    * "63": Standard *63* OCMAP categories are available for cause of death grouping. 
+    * "113": Additionally, the *113* MOIRA specific categories (ICD-9 and/or ICD-10 codes only)
+    * "Custom": Custom ICD categories can be selected by providing individual ICD codes. The ICD code revision is required to correspond to the selected time period. See example in code snippet below.
+* cod
+    * Cause of Death codes can be found at:
+    * https://moira.pitt.edu/codCategory/63
+    * https://moira.pitt.edu/codCategory/113
+* groupBy
+    * Group results by "timePeriod", "ageGroup", "race", "sex", "hispanicOrigin"
+* ratesPer
+    * Calculate rates per 1,000 or 100,000 people
+* ageAdjustment
+    * "true" or "false" indicates whether rates are caculated with age adjustment
 
 ```python
-payload={"""
-         
-         
-         
-         """
-         "timePeriod": [2000, 2001, 2002, 2003, 2004, 2005],
-         """
-         National, state, and county level data is available. 
-         The geographic region can be individually selected or 
-         joined into custom aggregated regions.
-
-         NOTE:
-         Alaska data is not available at the county level before 1979.
-         Alaska and Hawaii data is not available before 1960.
-         New Jersey data is not available from 1962-1963.
-         """
-         # "National", "State", or "County"
+payload={"timePeriod": [2000, 2001, 2002, 2003, 2004, 2005],
          "geoLevel":  "County",
-         
-         
-         """
-         
-         
-         """
          "abbreviatedStates":["CA","AZ"],
-         """
-         
-         
-         """
-         # Optional:
-         # "Aggregate selected states" or "Aggregate selected counties"
-         "geoAggregate": "Aggregate selected states",
-         
-         # Select all counties within selected states
+         # Optional geographical grouping/aggregation:
+         "geoAggregate": "Aggregate Selected Counties",
          "allCounties":"true",
-         """
-         
-         
-         """
-         "ageGroup": "All Default",         
-         """
-         
-         
-         """
-         "ageGroupCategory": "12",         
-         """
-         
-         
-         """
+         # Demographics:
+         "ageGroup": "All Default",
+         "ageGroupCategory": "12",
          "race": "All",         
-         """
-         
-         
-         """
          "sex": "All",         
-         """
-         Cause of Death Categories:
-         Standard 63 OCMAP categories are available for cause of death grouping. 
-         Additionally, the 113 MOIRA specific categories (ICD-9 and/or ICD-10 codes only)
-         """
          "codCategory": "113",
-         """
-         Cause of Death codes can be found at:
-            https://moira.pitt.edu/codCategory/63
-            https://moira.pitt.edu/codCategory/113
-         """
          "cod": [31,32,33,34],
-         """
-         Group by time period, age group, race and sex. 
-         MOIRA groups data geographically by default.
-         """
+         # Data grouping and calculation
          "groupBy": ["timePeriod","ageGroup","race","sex"},
-         """
-         Calculate mortality rates per 1000 or per 100,000         
-         """
          "ratesPer": 1000,
-         """
-         
-         """
          "ageAdjustment": "true"
         }
 ```
