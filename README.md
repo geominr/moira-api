@@ -23,44 +23,7 @@ def log_in(username, password):
 ```
 
 ## Payload
-The API takes payload of selection criteria for each MOIRA query in the form of a dictionary with the following fields:
-### timePeriod
-Specify your time period by individual years (1999, 2000, 2001, ...) or a time range ("1999 - 2001", "2002 - 2004", ...)
-### geoLevel
-"National", "State", and "County" level data is available. The geographic region can be individually selected or joined into custom aggregated regions.
-### abbreviatedStates
-Include all state abbreviations in a list
-### countyFIPS
-Include all 5-digit county FIPS codes in a list
-### allCounties
-if "true", selects all counties from the states in abbreviatedStates
-### geoAggregate
-"Aggregate Selected States" or "Aggregate Selected Counties"
-### ageGroup
-List of age groupings such as "15 - 19", "20 - 24", etc.
-### ageGroupCategory
-"12", "13" or "Custom"
-### race
-"White", "Black", "American Indian or Alaska Native", "Asian or Pacific Islander" are available depending on the time period
-### hispanicOrigin
-"Hispanic or Latino", "Not Hispanic or Latino", "Not Stated"
-### sex
-"Male" or "Female" or "All"
-### codCategory
-"63": Standard *63* OCMAP categories are available for cause of death grouping. 
-"113": Additionally, the *113* MOIRA specific categories (ICD-9 and/or ICD-10 codes only)
-"Custom": Custom ICD categories can be selected by providing individual ICD codes. The ICD code revision is required to correspond to the selected time period. See example in code snippet below.
-### cod
-Cause of Death codes can be found at:
-* https://moira.pitt.edu/codCategory/63
-* https://moira.pitt.edu/codCategory/113
-### groupBy
-Group results by "timePeriod", "cod", "ageGroup", "race", "sex", or "hispanicOrigin"
-### ratesPer
-Calculate rates per 1,000 or 100,000 people
-### ageAdjustment
-"true" or "false" indicates whether rates are caculated with age adjustment
-
+The API takes payload of selection criteria for each MOIRA query in the form of a dictionary. The example below shows the format:
 ```python
 payload={"timePeriod": [2000, 2001, 2002, 2003, 2004, 2005],
          "geoLevel":  "County",
@@ -95,6 +58,45 @@ payload={"timePeriod": [2000, 2001, 2002, 2003, 2004, 2005],
          "ageAdjustment": "true"
         }
 ```
+### MOIRA selection Criteria:
+#### timePeriod
+Specify your time period by individual years (1999, 2000, 2001, ...) or a time range ("1999 - 2001", "2002 - 2004", ...)
+#### geoLevel
+"National", "State", and "County" level data is available. The geographic region can be individually selected or joined into custom aggregated regions.
+#### abbreviatedStates
+Include all state abbreviations in a list
+#### countyFIPS
+Include all 5-digit county FIPS codes in a list
+#### allCounties
+if "true", selects all counties from the states in abbreviatedStates
+#### geoAggregate
+"Aggregate Selected States" or "Aggregate Selected Counties"
+#### ageGroup
+List of age groupings such as "15 - 19", "20 - 24", etc.
+#### ageGroupCategory
+"12", "13" or "Custom"
+#### race
+"White", "Black", "American Indian or Alaska Native", "Asian or Pacific Islander" are available depending on the time period
+#### hispanicOrigin
+"Hispanic or Latino", "Not Hispanic or Latino", "Not Stated"
+#### sex
+"Male" or "Female" or "All"
+#### codCategory
+"63": Standard *63* OCMAP categories are available for cause of death grouping. 
+"113": Additionally, the *113* MOIRA specific categories (ICD-9 and/or ICD-10 codes only)
+"Custom": Custom ICD categories can be selected by providing individual ICD codes. The ICD code revision is required to correspond to the selected time period. See example in code snippet below.
+#### cod
+Cause of Death codes can be found at:
+* https://moira.pitt.edu/codCategory/63
+* https://moira.pitt.edu/codCategory/113
+#### groupBy
+Group results by "timePeriod", "cod", "ageGroup", "race", "sex", or "hispanicOrigin"
+#### ratesPer
+Calculate rates per 1,000 or 100,000 people
+#### ageAdjustment
+"true" or "false" indicates whether rates are caculated with age adjustment
+
+
 
 ## Query
 
