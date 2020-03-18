@@ -55,7 +55,7 @@ Cause of Death codes can be found at:
 * https://moira.pitt.edu/codCategory/63
 * https://moira.pitt.edu/codCategory/113
 ### groupBy
-Group results by "timePeriod", "ageGroup", "race", "sex", "hispanicOrigin"
+Group results by "timePeriod", "cod", "ageGroup", "race", "sex", or "hispanicOrigin"
 ### ratesPer
 Calculate rates per 1,000 or 100,000 people
 ### ageAdjustment
