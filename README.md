@@ -7,6 +7,7 @@ Below are instructions and example code for using the MOIRA API. If you have any
 ## Login
 Register for the MOIRA system [here](https://moira.pitt.edu/users/create) to get your username and password
 ```python
+import requests
 def log_in(username, password):
     
     # Set configs
