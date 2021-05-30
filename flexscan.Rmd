@@ -1,0 +1,173 @@
+---
+title: "DDCluster"
+output: html_notebook
+---
+This notebook demonstrates how the Flexscan and Multicluster functions are used to detect statistically significant clusters of high rates of drug, alcohol and suicide-related mortality ("Deaths of Despair") in Appalachia, a mountainous region spanning much of the Eastern United States.
+
+The Flexscan function analyzes spatial count data using the flexible spatial scan
+statistic developed by Tango and Takahashi (2005) to detect spatial disease clusters.
+
+The Multicluster function
+
+```{r}
+devtools::install_github("tkhrotn/multicluster")
+
+library(Rtools)
+
+library(rflexscan)
+library(multicluster)
+library(RColorBrewer)
+library(sf)
+library(spdep)
+
+# Load data
+d.moira <- read.csv(file = "moira_data_new_expected.csv")
+shapes420 <- read_sf("appalachia_counties.shp")
+
+# Create neighbors object
+nb <- poly2nb(shapes420)
+
+```
+```{r}
+library(hash)
+time_periods <- hash()
+time_periods[["1980"]] <- "1979 - 1983"
+time_periods[["1986"]] <- "1984 - 1988"
+time_periods[["1990"]] <- "1989 - 1993"
+time_periods[["1996"]] <- "1994 - 1998"
+time_periods[["2000"]] <- "1999 - 2003"
+time_periods[["2007"]] <- "2004 - 2008"
+time_periods[["2010"]] <- "2009 - 2013"
+time_periods[["2016"]] <- "2014 - 2017"
+
+```
+
+```{r fig.height=6, fig.width=12}
+par(mfrow=c(2,4), mai=c(0.1,0.1,0.1,0.1), mar=c(0.1,0.1,0.1,0.1))
+
+for (y in unique(d.moira$Year)) {
+  
+  subs.moira <- subset(d.moira, (Year==y))
+  
+  fls <- rflexscan(
+      x=subs.moira$Lat,
+      y=subs.moira$Lon,
+      name=subs.moira$FIPS, 
+      observed=subs.moira$Observed, 
+      expected=subs.moira$Expected,
+      population=subs.moira$Pop_mid,
+      nb=nb, 
+      clustersize=10, 
+      ralpha = 0.05,
+      secondary = 5
+  )
+  print(paste("Midpoint year: ",toString(y)))
+  print(fls)
+  print(fls$cluster)
+  
+  choropleth(shapes420$geometry, fls, pval = 0.05, 
+             region_color = "darkgrey",
+             col= rev(brewer.pal(n = 6, name = "Reds")))
+  
+  title(time_periods[[as.character(y)]], line=-1)
+  labs <- 1:length(fls$cluster)
+  legend("topleft", legend = labs, title = "Cluster Rank",
+         col = rev(brewer.pal(n = 6, name = "Reds")), lwd = 4)
+  
+  
+}
+
+```
+
+Here we use the multicluster method, which detects multiple primary clusters:
+
+
+```{r fig.height=6, fig.width=12}
+par(mfrow=c(2,4), mai=c(0.1,0.1,0.1,0.1), mar=c(0.1,0.1,0.1,0.1))
+
+for (y in unique(d.moira$Year)) {
+  
+  subs.moira <- subset(d.moira, (Year==y))
+  
+  fls <- spatial.scan(
+      x=subs.moira$Lat,
+      y=subs.moira$Lon,
+      name=subs.moira$FIPS, 
+      observed=subs.moira$Observed, 
+      expected=subs.moira$Expected,
+      #population=subs.moira$Pop_mid,
+      nb=nb, 
+      clustersize=10, 
+      maxclusters = 6,
+      ralpha = 0.05
+    )
+  
+  print(paste("Midpoint year: ",toString(y)))
+  
+  print(fls$cluster)
+  
+  choropleth(shapes420$geometry, fls, pval = 0.05, 
+             region_color = "darkgrey",
+             col= rev(brewer.pal(n = 6, name = "Purples")))
+  
+  title(time_periods[[as.character(y)]], line=-1)
+  labs <- 1:length(fls$cluster)
+  legend("topleft", legend = labs, title = "Cluster Rank",
+         col = rev(brewer.pal(n = 6, name = "Purples")), lwd = 4)
+  
+}
+
+```
+```{r}
+df
+```
+
+
+
+```{r}
+install.packages("dendextend")
+library(tidyverse)  # data manipulation
+library(cluster)    # clustering algorithms
+
+library(factoextra) # clustering visualization
+library(dendextend) # for comparing two dendrograms
+
+df <- read.csv("metacluster_data.csv")
+
+# Dissimilarity matrix
+d <- dist(df, method = "euclidean")
+
+# Hierarchical clustering using Complete Linkage
+hc1 <- hclust(d, method = "centroid")
+
+# Plot the obtained dendrogram
+plot(hc1, cex = 0.6, labels=df$ClusterID, main="", xlab="")
+
+
+```
+```{r}
+install.packages("factoextra")
+
+library("factoextra")
+hc = hclust(d, method="centroid")
+
+fviz_dend(hc, k = 12, rect = TRUE, rect_border = "gray", rect_fill = FALSE)
+
+fviz_dend(hc, h = 1, rect = TRUE, rect_border = "gray", rect_fill = TRUE )
+```
+
+
+```{r}
+df <- read.csv("metacluster_data.csv")
+
+# Dissimilarity matrix
+d <- dist(df, method = "euclidean")
+
+# Hierarchical clustering using Complete Linkage
+hc1 <- hclust(d, method = "centroid" )
+
+# Plot the obtained dendrogram
+plot(hc1, cex = 0.6, hang = -1)
+
+```
+
